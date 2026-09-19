@@ -1,0 +1,18 @@
+{
+  "name": "invoice-line-parser",
+  "version": "0.1.0",
+  "description": "Parses a plain-text invoice line item format and reports errors with line and column numbers",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "lineitems": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "license": "MIT"
+}
