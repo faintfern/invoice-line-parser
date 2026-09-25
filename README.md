@@ -94,11 +94,23 @@ node dist/cli.js invoice.txt
 Prints each parsed line item and the running total to stdout, and any parse
 errors (formatted as above) to stderr. Exits non-zero if there were errors.
 
+## Development
+
+```
+npm run build   # compile with tsc
+npm test        # compile, then run the test suite with node --test
+```
+
+The test suite uses `node:test` and `node:assert`, both part of Node's
+standard library, so there's nothing to install.
+
 ## Status
 
-Early. The parser and CLI work end to end for the format described above.
-Not yet covered: multi-currency amounts, quantities with units (`2.5 kg`),
-and a proper test suite.
+Early. The parser and CLI work end to end for the format described above,
+with test coverage for the parser's edge cases (separators, missing
+description/price, negative and non-numeric input, CRLF line endings, error
+formatting). Not yet covered: multi-currency amounts and quantities with
+units (`2.5 kg`).
 
 ## License
 

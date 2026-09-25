@@ -124,24 +124,28 @@ export function parseInvoice(source: string): ParseResult {
       continue;
     }
 
-    const descStart = skipWhitespace(rawLine, separator.end);
-    const rest = rawLine.slice(descStart);
-    const atIndex = rest.lastIndexOf(" @ ");
+    // Slice from separator.end without skipping whitespace first: an empty
+    // description ("1 x @ 5.00") needs its leading space intact so the " @ "
+    // separator pattern can still match right at the start of this slice.
+    const afterSeparator = rawLine.slice(separator.end);
+    const atIndex = afterSeparator.lastIndexOf(" @ ");
     if (atIndex === -1) {
       fail('expected "@" followed by a unit price', rawLine.length + 1);
       continue;
     }
 
-    const description = rest.slice(0, atIndex).trimEnd();
+    const description = afterSeparator.slice(0, atIndex).trim();
     if (description.length === 0) {
+      const descStart =
+        separator.end + (afterSeparator.length - afterSeparator.trimStart().length);
       fail("line item is missing a description", descStart + 1);
       continue;
     }
 
-    const afterAt = rest.slice(atIndex + 3);
+    const afterAt = afterSeparator.slice(atIndex + 3);
     const priceLeadingSpace = afterAt.length - afterAt.trimStart().length;
     const priceToken = afterAt.trim();
-    const priceColumn = descStart + atIndex + 3 + priceLeadingSpace + 1;
+    const priceColumn = separator.end + atIndex + 3 + priceLeadingSpace + 1;
 
     const quantity = parseNumber(qty.token);
     if (quantity === null) {
